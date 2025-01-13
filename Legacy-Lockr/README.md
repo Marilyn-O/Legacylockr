@@ -1,82 +1,86 @@
-## capsule creation and capsule storage
-
----
+# Capsule contributors management Smart contract
 
 ## Overview
 
-The **Capsule Storage** smart contract is designed to create and manage digital time capsules. Users can store various media, set unlock dates, and manage the visibility of their capsules in a decentralized manner. This contract supports functions for capsule creation, retrieval, status updates, and visibility management.
+This smart contract, written in Clarity for the Stacks blockchain, manages contributors for capsules. It allows capsule owners to add and remove contributors, and provides functionality to check if an address is a contributor to a specific capsule.
+
+## Contract Details
+
+- **Name**: Capsule-contribution-management
+- **Version**: 1.0.0
+- **Language**: Clarity
 
 ## Features
 
-### 1. Capsule Creation
+1. Add contributors to a capsule
+2. Remove contributors from a capsule
+3. Check if an address is a contributor to a capsule
+4. Initialize new capsules (for testing purposes)
 
-- Users can create a new capsule by providing:
-  - Unlock date
-  - Media links (e.g., photos, videos)
-  - Contributors (participants who can access or contribute to the capsule)
-  - Public or private visibility status
-- Upon creation, the contract assigns a unique ID to each capsule and stores all relevant information securely.
+## Data Structures
 
-### 2. Capsule Retrieval
+The contract uses two main data maps:
 
-- Users can retrieve capsule data using the capsule ID.
-- The retrieved data includes:
-  - Owner's address
-  - Unlock date
-  - Media links
-  - List of contributors
-  - Visibility status (public/private)
-  - Current status (active, unlocked, archived)
+1. `capsules`: Maps capsule IDs to their owners
+2. `contributors`: Maps capsule IDs and contributor addresses to their contributor status
 
-### 3. Capsule Status Management
+## Functions
 
-- Users can update the status of their capsules:
-  - **ACTIVE**: The capsule is active and can be accessed.
-  - **UNLOCKED**: The capsule has been unlocked and can be accessed by contributors.
-  - **ARCHIVED**: The capsule is archived and no longer active.
-- Status updates are restricted to the owner of the capsule to maintain security.
+### Public Functions
 
-### 4. Public/Private Visibility Management
+1. `add-contributor (capsule-id uint) (contributor principal) -> (response bool uint)`
+   - Adds a contributor to a capsule
+   - Only the capsule owner can add contributors
+   - Returns `(ok true)` on success, or an error if the caller is not the owner or if the contributor already exists
 
-- Users can control the visibility of their capsules:
-  - **PUBLIC**: The capsule can be viewed by anyone.
-  - **PRIVATE**: The capsule is restricted to specified contributors only.
-- Visibility updates are also restricted to the owner, ensuring control over who can view the capsule.
+2. `remove-contributor (capsule-id uint) (contributor principal) -> (response bool uint)`
+   - Removes a contributor from a capsule
+   - Only the capsule owner can remove contributors
+   - Returns `(ok true)` on success, or an error if the caller is not the owner or if the contributor doesn't exist
 
-### 5. Event Logging
+3. `is-contributor (capsule-id uint) (contributor principal) -> bool`
+   - Checks if an address is a contributor to a specific capsule
+   - Returns `true` if the address is a contributor, `false` otherwise
 
-- The contract emits events upon the creation of capsules, enabling front-end applications to react to state changes in real-time.
+4. `initialize-capsule (capsule-id uint) -> (response bool uint)`
+   - Initializes a new capsule with the sender as the owner
+   - Primarily used for testing purposes
+   - Returns `(ok true)` on success, or an error if the capsule already exists
 
-## Technical Specifications
+### Private Functions
 
-### Data Structures
+1. `is-owner (capsule-id uint) -> bool`
+   - Checks if the transaction sender is the owner of the specified capsule
+   - Used internally to enforce ownership checks
 
-- **Capsule Map**: Stores capsule data with capsule ID as the key.
-  - `owner`: Principal address of the capsule creator.
-  - `unlock-date`: Timestamp for when the capsule can be accessed.
-  - `media-links`: List of media links associated with the capsule.
-  - `contributors`: List of principals who can access the capsule.
-  - `public-status`: Indicates whether the capsule is public or private.
-  - `status`: Current status of the capsule (ACTIVE, UNLOCKED, ARCHIVED).
+## Error Codes
 
-### Constants
+- `ERR-NOT-OWNER (err u100)`: Returned when a non-owner tries to perform an owner-only action
+- `ERR-ALREADY-CONTRIBUTOR (err u101)`: Returned when trying to add an existing contributor
+- `ERR-NOT-CONTRIBUTOR (err u102)`: Returned when trying to remove a non-existent contributor
 
-- **Status Values**:
-  - `ACTIVE` (u0)
-  - `UNLOCKED` (u1)
-  - `ARCHIVED` (u2)
+## Usage Examples
 
-- **Visibility Values**:
-  - `PUBLIC` (u0)
-  - `PRIVATE` (u1)
+1. Adding a contributor:
 
-### Key Functions
+   ```clarity
+   (contract-call? .capsule-contribution-management add-contributor u1 'ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM)
+   ```
 
-- **create-capsule**: Creates a new time capsule with specified parameters.
-- **get-capsule**: Retrieves capsule data by capsule ID.
-- **update-capsule-status**: Updates the current status of the capsule.
-- **update-public-status**: Changes the visibility of the capsule between public and private.
+2. Removing a contributor:
 
-## Conclusion
+   ```clarity
+   (contract-call? .capsule-contribution-management remove-contributor u1 'ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM)
+   ```
 
-The Capsule Storage smart contract provides a robust and secure platform for managing digital time capsules. By leveraging the capabilities of Clarity and the Stacks blockchain, users can ensure that their digital memories are preserved and managed in a decentralized manner.
+3. Checking if an address is a contributor:
+
+   ```clarity
+   (contract-call? .capsule-contribution-management is-contributor u1 'ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM)
+   ```
+
+## Security Considerations
+
+- Only capsule owners can add or remove contributors
+- The contract includes checks to prevent duplicate additions or removals of contributors
+- Ensure proper access control when integrating this contract with other systems.

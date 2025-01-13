@@ -5,6 +5,11 @@ authors = []
 telemetry = true
 cache_dir = '.\.cache'
 requirements = []
+[contracts.Capsule-contribution-management]
+path = 'contracts/Capsule-contribution-management.clar'
+clarity_version = 2
+epoch = 2.5
+
 [contracts.Capsule-creation]
 path = 'contracts/Capsule-creation.clar'
 clarity_version = 2
