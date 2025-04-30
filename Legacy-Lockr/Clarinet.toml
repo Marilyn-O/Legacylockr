@@ -25,6 +25,9 @@ path = 'contracts/capsule-storage.clar'
 clarity_version = 2
 epoch = 2.5
 
+
+[contracts.capusle-visibility]
+path = 'contracts/capusle-visibility.clar'
 [contracts.contributors-management]
 path = 'contracts/contributors-management.clar'
 clarity_version = 2
