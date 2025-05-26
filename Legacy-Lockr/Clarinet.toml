@@ -20,18 +20,30 @@ path = 'contracts/Unlock-mechanism.clar'
 clarity_version = 2
 epoch = 2.5
 
+[contracts.capsule-event]
+path = 'contracts/capsule-event.clar'
+clarity_version = 3
+epoch = 3.0
+
 [contracts.capsule-storage]
 path = 'contracts/capsule-storage.clar'
 clarity_version = 2
 epoch = 2.5
 
-
 [contracts.capusle-visibility]
 path = 'contracts/capusle-visibility.clar'
+clarity_version = 1
+epoch = 2.05
+
 [contracts.contributors-management]
 path = 'contracts/contributors-management.clar'
 clarity_version = 2
 epoch = 2.5
+
+[contracts.time-capsule]
+path = 'contracts/time-capsule.clar'
+clarity_version = 3
+epoch = 3.0
 [repl.analysis]
 passes = ['check_checker']
 
