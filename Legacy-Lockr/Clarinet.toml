@@ -32,6 +32,9 @@ epoch = 2.5
 
 [contracts.capsule-unlock]
 path = 'contracts/capsule-unlock.clar'
+clarity_version = 1
+epoch = 2.05
+
 [contracts.capusle-visibility]
 path = 'contracts/capusle-visibility.clar'
 clarity_version = 1
@@ -41,6 +44,11 @@ epoch = 2.05
 path = 'contracts/contributors-management.clar'
 clarity_version = 2
 epoch = 2.5
+
+[contracts.immutable-records]
+path = 'contracts/immutable-records.clar'
+clarity_version = 3
+epoch = 3.0
 
 [contracts.time-capsule]
 path = 'contracts/time-capsule.clar'
